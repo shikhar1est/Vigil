@@ -1,26 +1,19 @@
+// server/index.js
 import express from 'express';
 import http from 'http';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
+import connectDB from './config/db.js';
+import { typeDefs } from './graphql/typeDefs.js';     // <-- Import
+import { resolvers } from './graphql/resolvers.js';   // <-- Import
 
 dotenv.config();
+connectDB();
 
 const app = express();
 const httpServer = http.createServer(app);
-
-const typeDefs = `#graphql
-  type Query {
-    hello: String
-  }
-`;
-
-const resolvers = {
-  Query: {
-    hello: () => 'The server is working!',
-  },
-};
 
 const server = new ApolloServer({
   typeDefs,
